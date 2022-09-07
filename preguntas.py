@@ -108,6 +108,36 @@ def pregunta_04():
     archivo = open("data.csv", "r").readlines()
     dic = {}
     for row in archivo:
+      row = row.split('\t')
+      fecha = row[2].split('-')
+      if fecha[1] in dic:
+        dic[fecha[1]] += 1
+      else:
+        dic[fecha[1]] = 1
+    ListaDeItems = list(dic.items())
+    ListaDeItems.sort()
+
+    return ListaDeItems
+
+
+def pregunta_05():
+    """
+    Retorne una lista de tuplas con el valor maximo y minimo de la columna 2 por cada
+    letra de la columa 1.
+
+    Rta/
+    [
+        ("A", 9, 2),
+        ("B", 9, 1),
+        ("C", 9, 0),
+        ("D", 8, 3),
+        ("E", 9, 1),
+    ]
+
+    """
+    archivo = open("data.csv", "r").readlines()
+    dic = {}
+    for row in archivo:
       if row[0] in dic:
         mayor = dic[row[0]][0]
         menor = dic[row[0]][1]
@@ -124,22 +154,28 @@ def pregunta_04():
     for i in range(len(ListaDeItems)):
       x = (ListaDeItems[i][0],ListaDeItems[i][1][0],ListaDeItems[i][1][1])
       respuesta.append(x)
-      
     return respuesta
 
 
-def pregunta_05():
+def pregunta_06():
     """
-    Retorne una lista de tuplas con el valor maximo y minimo de la columna 2 por cada
-    letra de la columa 1.
+    La columna 5 codifica un diccionario donde cada cadena de tres letras corresponde a
+    una clave y el valor despues del caracter `:` corresponde al valor asociado a la
+    clave. Por cada clave, obtenga el valor asociado mas pequeño y el valor asociado mas
+    grande computados sobre todo el archivo.
 
     Rta/
     [
-        ("A", 9, 2),
-        ("B", 9, 1),
-        ("C", 9, 0),
-        ("D", 8, 3),
-        ("E", 9, 1),
+        ("aaa", 1, 9),
+        ("bbb", 1, 9),
+        ("ccc", 1, 10),
+        ("ddd", 0, 9),
+        ("eee", 1, 7),
+        ("fff", 0, 9),
+        ("ggg", 3, 10),
+        ("hhh", 0, 9),
+        ("iii", 0, 9),
+        ("jjj", 5, 17),
     ]
 
     """
@@ -173,45 +209,6 @@ def pregunta_05():
     return respuesta
 
 
-def pregunta_06():
-    """
-    La columna 5 codifica un diccionario donde cada cadena de tres letras corresponde a
-    una clave y el valor despues del caracter `:` corresponde al valor asociado a la
-    clave. Por cada clave, obtenga el valor asociado mas pequeño y el valor asociado mas
-    grande computados sobre todo el archivo.
-
-    Rta/
-    [
-        ("aaa", 1, 9),
-        ("bbb", 1, 9),
-        ("ccc", 1, 10),
-        ("ddd", 0, 9),
-        ("eee", 1, 7),
-        ("fff", 0, 9),
-        ("ggg", 3, 10),
-        ("hhh", 0, 9),
-        ("iii", 0, 9),
-        ("jjj", 5, 17),
-    ]
-
-    """
-    archivo = open("data.csv", "r").readlines()
-    dic = {}
-    for row in archivo:
-      if row[2] in dic:
-        lista = dic[row[2]].copy()
-        if not(row[0] in lista):
-          lista.append(row[0])
-          dic[row[2]] = lista.copy()
-      else:
-        dic[row[2]] = [row[0]]
-      
-    ListaDeItems = list(dic.items())
-    ListaDeItems.sort(key=lambda x: (x[0],x[1].sort()), reverse=False)
-
-    return ListaDeItems
-
-
 def pregunta_07():
     """
     Retorne una lista de tuplas que asocien las columnas 0 y 1. Cada tupla contiene un
@@ -236,12 +233,12 @@ def pregunta_07():
     archivo = open("data.csv", "r").readlines()
     dic = {}
     for row in archivo:
-      if row[2] in dic:
-        lista = dic[row[2]].copy()
+      if int(row[2]) in dic:
+        lista = dic[int(row[2])].copy()
         lista.append(row[0])
-        dic[row[2]] = lista.copy()
+        dic[int(row[2])] = lista.copy()
       else:
-        dic[row[2]] = [row[0]]
+        dic[int(row[2])] = [row[0]]
       
     ListaDeItems = list(dic.items())
     ListaDeItems.sort(key=lambda x: (x[0]), reverse=False)
@@ -275,13 +272,13 @@ def pregunta_08():
     archivo = open("data.csv", "r").readlines()
     dic = {}
     for row in archivo:
-      if row[2] in dic:
-        lista = dic[row[2]].copy()
+      if int(row[2]) in dic:
+        lista = dic[int(row[2])].copy()
         if not(row[0] in lista):
           lista.append(row[0])
-          dic[row[2]] = lista.copy()
+          dic[int(row[2])] = lista.copy()
       else:
-        dic[row[2]] = [row[0]]
+        dic[int(row[2])] = [row[0]]
       
     ListaDeItems = list(dic.items())
     ListaDeItems.sort(key=lambda x: (x[0],x[1].sort()), reverse=False)
@@ -310,24 +307,25 @@ def pregunta_09():
 
     """
     archivo = open("data.csv", "r").readlines()
-    Respuesta = []
+    dic = {}
     for row in archivo:
-  
-      row = row.replace("\n","")
-      row = row.split("\t")
-      col1 = row[0]
-      col4 = row[3]
-      col5 = row[4]
-      tabla_util = []
-      tabla_util.append(col1)
-      tabla_util.append(col4)
-      tabla_util.append(col5)
-      
-      cantidadCol4 = len(tabla_util[1].split(","))
-      cantidadCol5 = len(tabla_util[2].split(","))
-      Respuesta.append((tabla_util[0], cantidadCol4, cantidadCol5))
+      row = row.split('\t')
+      row = row[-1].split(',')
+      element = row[-1].replace('\n', '')
+      row.pop()
+      row.append(element)
+      for element in row:
+        splited = element.split(':')
+        if splited[0] in dic:
+          dic[splited[0]] += 1
+        else:
+          dic[splited[0]] = 1
+    dic2 = {}
+    listaOrdenada = sorted(list(dic.items()))
+    for i in listaOrdenada:
+      dic2[i[0]] = i[1]
 
-    return Respuesta
+    return dic2
 
 
 def pregunta_10():
