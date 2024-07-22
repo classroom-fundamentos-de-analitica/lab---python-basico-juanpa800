@@ -9,9 +9,9 @@ básicas.
 
 Utilice el archivo `data.csv` para resolver las preguntas.
 
-
 """
 
+archivo = open("data.csv", "r").readlines()
 
 def pregunta_01():
     """
@@ -21,7 +21,12 @@ def pregunta_01():
     214
 
     """
-    return
+    archivo = open("data.csv", "r").readlines()
+    sumaCol2 = 0
+    for row in archivo:
+      sumaCol2 += int(row[2])
+
+    return sumaCol2
 
 
 def pregunta_02():
@@ -39,7 +44,16 @@ def pregunta_02():
     ]
 
     """
-    return
+    archivo = open("data.csv", "r").readlines()
+    dic = {}
+    for row in archivo:
+      if row[0] in dic:
+        dic[row[0]] += 1
+      else:
+        dic[row[0]] = 1
+    ListaDeItems = list(dic.items())
+    ListaDeItems.sort()
+    return ListaDeItems
 
 
 def pregunta_03():
@@ -57,7 +71,16 @@ def pregunta_03():
     ]
 
     """
-    return
+    archivo = open("data.csv", "r").readlines()
+    dic = {}
+    for row in archivo:
+      if row[0] in dic:
+        dic[row[0]] += int(row[2])
+      else:
+        dic[row[0]] = int(row[2])
+    ListaDeItems = list(dic.items())
+    ListaDeItems.sort()
+    return ListaDeItems
 
 
 def pregunta_04():
@@ -82,7 +105,19 @@ def pregunta_04():
     ]
 
     """
-    return
+    archivo = open("data.csv", "r").readlines()
+    dic = {}
+    for row in archivo:
+      row = row.split('\t')
+      fecha = row[2].split('-')
+      if fecha[1] in dic:
+        dic[fecha[1]] += 1
+      else:
+        dic[fecha[1]] = 1
+    ListaDeItems = list(dic.items())
+    ListaDeItems.sort()
+
+    return ListaDeItems
 
 
 def pregunta_05():
@@ -100,7 +135,26 @@ def pregunta_05():
     ]
 
     """
-    return
+    archivo = open("data.csv", "r").readlines()
+    dic = {}
+    for row in archivo:
+      if row[0] in dic:
+        mayor = dic[row[0]][0]
+        menor = dic[row[0]][1]
+        if int(mayor) < int(row[2]):
+          dic[row[0]][0] = int(row[2])
+        if int(menor) > int(row[2]):
+          dic[row[0]][1] = int(row[2])
+      else:
+        dic[row[0]] = [int(row[2]),int(row[2])]
+    ListaDeItems = list(dic.items())
+    ListaDeItems.sort()
+    respuesta = []
+
+    for i in range(len(ListaDeItems)):
+      x = (ListaDeItems[i][0],ListaDeItems[i][1][0],ListaDeItems[i][1][1])
+      respuesta.append(x)
+    return respuesta
 
 
 def pregunta_06():
@@ -125,7 +179,34 @@ def pregunta_06():
     ]
 
     """
-    return
+    archivo = open("data.csv", "r").readlines()
+    dic = {}
+    for row in archivo:
+      row = row.split('\t')
+      row = row[-1].split(',')
+      element = row[-1].replace('\n', '')
+      row.pop()
+      row.append(element)
+      for i in row:
+        splited = i.split(':')
+        if splited[0] in dic:
+          mayor = dic[splited[0]][1]
+          menor = dic[splited[0]][0]
+          if int(mayor) < int(splited[1]):
+            dic[splited[0]][1] = int(splited[1])
+          if int(menor) > int(splited[1]):
+            dic[splited[0]][0] = int(splited[1])
+        else:
+          dic[splited[0]] = [int(splited[1]),int(splited[1])]
+
+    ListaDeItems = list(dic.items())
+    ListaDeItems.sort()
+    respuesta = []
+
+    for i in range(len(ListaDeItems)):
+        x = (ListaDeItems[i][0],ListaDeItems[i][1][0],ListaDeItems[i][1][1])
+        respuesta.append(x)
+    return respuesta
 
 
 def pregunta_07():
@@ -149,7 +230,21 @@ def pregunta_07():
     ]
 
     """
-    return
+    archivo = open("data.csv", "r").readlines()
+    dic = {}
+    for row in archivo:
+      if int(row[2]) in dic:
+        lista = dic[int(row[2])].copy()
+        lista.append(row[0])
+        dic[int(row[2])] = lista.copy()
+      else:
+        dic[int(row[2])] = [row[0]]
+      
+    ListaDeItems = list(dic.items())
+    ListaDeItems.sort(key=lambda x: (x[0]), reverse=False)
+
+
+    return ListaDeItems 
 
 
 def pregunta_08():
@@ -174,7 +269,21 @@ def pregunta_08():
     ]
 
     """
-    return
+    archivo = open("data.csv", "r").readlines()
+    dic = {}
+    for row in archivo:
+      if int(row[2]) in dic:
+        lista = dic[int(row[2])].copy()
+        if not(row[0] in lista):
+          lista.append(row[0])
+          dic[int(row[2])] = lista.copy()
+      else:
+        dic[int(row[2])] = [row[0]]
+      
+    ListaDeItems = list(dic.items())
+    ListaDeItems.sort(key=lambda x: (x[0],x[1].sort()), reverse=False)
+
+    return ListaDeItems
 
 
 def pregunta_09():
@@ -197,7 +306,26 @@ def pregunta_09():
     }
 
     """
-    return
+    archivo = open("data.csv", "r").readlines()
+    dic = {}
+    for row in archivo:
+      row = row.split('\t')
+      row = row[-1].split(',')
+      element = row[-1].replace('\n', '')
+      row.pop()
+      row.append(element)
+      for element in row:
+        splited = element.split(':')
+        if splited[0] in dic:
+          dic[splited[0]] += 1
+        else:
+          dic[splited[0]] = 1
+    dic2 = {}
+    listaOrdenada = sorted(list(dic.items()))
+    for i in listaOrdenada:
+      dic2[i[0]] = i[1]
+
+    return dic2
 
 
 def pregunta_10():
@@ -218,7 +346,25 @@ def pregunta_10():
 
 
     """
-    return
+    archivo = open("data.csv", "r").readlines()
+    Respuesta = []
+    for row in archivo:
+  
+      row = row.replace("\n","")
+      row = row.split("\t")
+      col1 = row[0]
+      col4 = row[3]
+      col5 = row[4]
+      tabla_util = []
+      tabla_util.append(col1)
+      tabla_util.append(col4)
+      tabla_util.append(col5)
+      
+      cantidadCol4 = len(tabla_util[1].split(","))
+      cantidadCol5 = len(tabla_util[2].split(","))
+      Respuesta.append((tabla_util[0], cantidadCol4, cantidadCol5))
+
+    return Respuesta
 
 
 def pregunta_11():
@@ -239,7 +385,28 @@ def pregunta_11():
 
 
     """
-    return
+    archivo = open("data.csv", "r").readlines()
+    dic = {}
+    for row in archivo:
+      row = row.replace("\n","")
+      row = row.split("\t")
+      col2 = row[1]
+      col4 = row[3]
+      tabla_util = []
+      tabla_util.append(col2)
+      tabla_util.append(col4)
+      
+      for i in tabla_util[1][::2]:
+        if i in dic: 
+          dic[i] = int(dic[i]) + int(tabla_util[0])
+        else:
+          dic[i] = int(tabla_util[0])
+
+      dic2 = {}
+      listaOrdenada = sorted(list(dic.items()))
+      for i in listaOrdenada:
+        dic2[i[0]] = i[1]
+    return dic2
 
 
 def pregunta_12():
@@ -257,4 +424,22 @@ def pregunta_12():
     }
 
     """
-    return
+    archivo = open("data.csv", "r").readlines()
+    dic = {'A':0, 'B':0, 'C':0, 'D':0, 'E':0}
+    for row in archivo:
+
+      row = row.replace("\n","")
+      row = row.split("\t")
+      col1 = row[0]
+      col5 = row[4]
+      tabla_util = []
+      tabla_util.append(col1)
+      tabla_util.append(col5)
+      elementos = (tabla_util[1].split(','))
+      sum = 0
+      for i in elementos:
+        x = i.split(':')
+        sum += int(x[1])
+      dic[tabla_util[0]] += sum
+
+    return dic
